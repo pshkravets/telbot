@@ -11,6 +11,8 @@ def update_messages(messages):
     session.query(Message).delete()
     session.commit()
     for message in messages.values():
+        print(message['text'])
+        print(message['date'])
         new_message = Message(
             message_id=message['message_id'],
             date=message['date'],

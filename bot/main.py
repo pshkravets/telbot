@@ -1,4 +1,5 @@
 import os
+import pytz
 
 from telethon import TelegramClient
 
@@ -9,6 +10,8 @@ api_hash = os.getenv('API_HASH')
 phone = os.getenv('PHONE')
 
 client = TelegramClient('/bot/my_bot.session', api_id, api_hash)
+
+local_tz = pytz.timezone('Europe/Kyiv')
 
 
 async def fetch_messages():
@@ -24,7 +27,7 @@ async def fetch_messages():
             for message in messages:
                 if message.sender_id != my_id:
                     new_messages[message.id] = {
-                        'date': message.date,
+                        'date': message.date.astimezone(local_tz),
                         'text': message.text,
                         'message_id': message.id,
                         'first_name': message.sender.first_name,
