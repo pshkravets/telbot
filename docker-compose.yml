@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  postgre:
+    image: postgres:13
+    container_name: 'postgres'
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "qwe123"
+      POSTGRES_DB: "messagesdb"
+    ports:
+      - "5432:5432"
+
+  bot:
+    build:
+      context: ./bot/
+      dockerfile: Dockerfile
+    container_name: bot
+    ports:
+      - '3000:3000'
+    depends_on:
+      - postgre
+
+  last_messages:
+    build:
+      context: ./last_messages/
+      dockerfile: Dockerfile
+    restart: always
+    container_name: 'last_messages'
+    command: python ./app.py
+    depends_on:
+      - postgre
